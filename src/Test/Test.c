@@ -4,14 +4,14 @@
  * Copyright (c) 2016
  * University of Hamburg, ZBH - Center for Bioinformatics
  * Niek Andresen, Florian Flachsenberg, Matthias Rarey
- * 
+ *
  * Please cite:
- * 
+ *
  * Kolodzik, A.; Urbaczek, S.; Rarey, M.
  * Unique Ring Families: A Chemically Meaningful Description
  * of Molecular Ring Topologies.
  * J. Chem. Inf. Model., 2012, 52 (8), pp 2013-2021
- * 
+ *
  * Flachsenberg, F.; Andresen, N.; Rarey, M.
  * RingDecomposerLib: An Open-Source Implementation of
  * Unique Ring Families and Other Cycle Bases.
@@ -57,8 +57,8 @@
  * `test`.
  *
  * The parameter `timeout` is optional and specifies a timeout
- * in seconds for the exponential URF validation and the SSSR validation algorithm.
- * (Timeouts are failures!)
+ * in seconds for the exponential URF validation and the SSSR validation
+ * algorithm. (Timeouts are failures!)
  *
  * File format
  * ------------
@@ -96,20 +96,22 @@
 #include "TestValidate.h"
 
 /** @private */
-int main(int argc, char **argv)
-{
+int main(int argc, char** argv) {
   const char* filename;
-  RDL_graph *graph;
-  RDL_data *data;
+  RDL_graph* graph;
+  RDL_data* data;
   const char* mode;
   unsigned idx;
-  int timeout = -1, urf_validation_result, basis_validation_result, consistency_result;
+  int timeout = -1, urf_validation_result, basis_validation_result,
+      consistency_result;
   int return_code;
 
   if (argc < 2) {
-    fprintf(stderr, "usage: %s mode filename [timeout=-1]\nwith mode 'demo' "
-        "for demo output of URF calculations\n"
-        "or\nwith mode 'validate' for testing/validation\n", argv[0]);
+    fprintf(stderr,
+            "usage: %s mode filename [timeout=-1]\nwith mode 'demo' "
+            "for demo output of URF calculations\n"
+            "or\nwith mode 'validate' for testing/validation\n",
+            argv[0]);
     return EXIT_FAILURE;
   }
 
@@ -120,11 +122,13 @@ int main(int argc, char **argv)
       fprintf(stderr, "usage: %s demo filename\n", argv[0]);
       return EXIT_FAILURE;
     }
-  }
-  else if (!strcmp(mode, "validate")) {
+  } else if (!strcmp(mode, "validate")) {
     if (argc < 3) {
-      fprintf(stderr, "usage: %s demo filename [timeout=-1]\n"
-          "with timeout is validation timeout in seconds, default -1 (no timeout)\n", argv[0]);
+      fprintf(
+          stderr,
+          "usage: %s demo filename [timeout=-1]\n"
+          "with timeout is validation timeout in seconds, default -1 (no timeout)\n",
+          argv[0]);
       return EXIT_FAILURE;
     }
     if (argc > 3) {
@@ -133,9 +137,9 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
       }
     }
-  }
-  else {
-    fprintf(stderr, "invalid mode '%s', allowed are 'demo' and 'validate'\n", mode);
+  } else {
+    fprintf(stderr, "invalid mode '%s', allowed are 'demo' and 'validate'\n",
+            mode);
     return EXIT_FAILURE;
   }
 
@@ -151,7 +155,8 @@ int main(int argc, char **argv)
   graph = RDL_initNewGraph(dimacs_graph->nof_nodes);
 
   for (idx = 0; idx < dimacs_graph->nof_edges; ++idx) {
-    RDL_addUEdge(graph, dimacs_graph->edges[idx][0]-1, dimacs_graph->edges[idx][1]-1);
+    RDL_addUEdge(graph, dimacs_graph->edges[idx][0] - 1,
+                 dimacs_graph->edges[idx][1] - 1);
   }
 
   RDL_setOutputFunction(RDL_writeToStderr);
@@ -167,50 +172,41 @@ int main(int argc, char **argv)
   if (!strcmp(mode, "demo")) {
     RDL_demo_output(data);
     return_code = EXIT_SUCCESS;
-  }
-  else if (!strcmp(mode, "validate")) {
-    RDL_validate(data, dimacs_graph, timeout,
-        &urf_validation_result, &basis_validation_result);
+  } else if (!strcmp(mode, "validate")) {
+    RDL_validate(data, dimacs_graph, timeout, &urf_validation_result,
+                 &basis_validation_result);
     if (urf_validation_result == -1) {
       fprintf(stdout, "URF validation timed out!\n");
-    }
-    else if (urf_validation_result == -2) {
+    } else if (urf_validation_result == -2) {
       fprintf(stdout, "URF validation ran out of memory!\n");
-    }
-    else if (urf_validation_result == 0) {
+    } else if (urf_validation_result == 0) {
       fprintf(stdout, "URF validation successful!\n");
-    }
-    else {
+    } else {
       fprintf(stderr, "URF validation failed!\n");
     }
 
     if (basis_validation_result == -1) {
       fprintf(stdout, "MCB validation timed out!\n");
-    }
-    else if (basis_validation_result == 0) {
+    } else if (basis_validation_result == 0) {
       fprintf(stdout, "MCB validation successful!\n");
-    }
-    else {
+    } else {
       fprintf(stderr, "MCB validation failed!\n");
     }
 
     consistency_result = RDL_checkConsistency(data);
     if (consistency_result == 0) {
       fprintf(stdout, "consistency validation successful!\n");
-    }
-    else {
+    } else {
       fprintf(stderr, "consistency validation failed!\n");
     }
 
-    if (urf_validation_result || consistency_result
-        || basis_validation_result) {
+    if (urf_validation_result || consistency_result ||
+        basis_validation_result) {
       return_code = EXIT_FAILURE;
-    }
-    else {
+    } else {
       return_code = EXIT_SUCCESS;
     }
-  }
-  else {
+  } else {
     return_code = EXIT_FAILURE;
   }
 

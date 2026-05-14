@@ -22,10 +22,11 @@
 #include <stdlib.h>
 
 #include "RDLbitset.h"
+#include "RDLutility.h"
 
 /* add two compressed cycles inplace */
-void RDL_bitset_xor_inplace(unsigned char* dst, unsigned const char* src, unsigned size)
-{
+void RDL_bitset_xor_inplace(unsigned char *dst, unsigned const char *src,
+                            unsigned size) {
   unsigned i;
 
   for (i = 0; i < size; ++i) {
@@ -33,8 +34,8 @@ void RDL_bitset_xor_inplace(unsigned char* dst, unsigned const char* src, unsign
   }
 }
 
-void RDL_bitset_or_inplace(unsigned char* dst, unsigned const char* src, unsigned size)
-{
+void RDL_bitset_or_inplace(unsigned char *dst, unsigned const char *src,
+                           unsigned size) {
   unsigned i;
 
   for (i = 0; i < size; ++i) {
@@ -43,22 +44,20 @@ void RDL_bitset_or_inplace(unsigned char* dst, unsigned const char* src, unsigne
 }
 
 /* check if compressed cycle is empty (uses an empty template for efficiency */
-int RDL_bitset_empty(const unsigned char* cycle, const unsigned char* empty_cycle, unsigned size)
-{
+int RDL_bitset_empty(const unsigned char *cycle,
+                     const unsigned char *empty_cycle, unsigned size) {
   return !memcmp(cycle, empty_cycle, size * sizeof(*cycle));
 }
 
 /* define block size (should be 8 bit) */
-static const unsigned BlockSize = 8*sizeof(unsigned char);
+static const unsigned BlockSize = 8 * sizeof(unsigned char);
 
 /* set position of compressed bitset */
-void RDL_bitset_set(unsigned char* bitset, unsigned pos)
-{
+void RDL_bitset_set(unsigned char *bitset, unsigned pos) {
   bitset[pos / BlockSize] |= (unsigned char)(1 << (pos % BlockSize));
 }
 
-unsigned RDL_bitset_init(unsigned char** compressed, unsigned size)
-{
+unsigned RDL_bitset_init(unsigned char **compressed, unsigned size) {
   unsigned new_size;
 
   new_size = size / BlockSize;
@@ -66,15 +65,15 @@ unsigned RDL_bitset_init(unsigned char** compressed, unsigned size)
     ++new_size;
   }
 
-  *compressed = malloc(new_size * sizeof(**compressed));
+  *compressed = RDL_malloc(new_size * sizeof(**compressed));
   memset(*compressed, 0, new_size * sizeof(**compressed));
 
   return new_size;
 }
 
 /* make a compressed bitset */
-unsigned RDL_bitset_compressed(unsigned char** compressed, const char* edges, unsigned size)
-{
+unsigned RDL_bitset_compressed(unsigned char **compressed, const char *edges,
+                               unsigned size) {
   unsigned new_size, i;
 
   new_size = RDL_bitset_init(compressed, size);
@@ -89,14 +88,13 @@ unsigned RDL_bitset_compressed(unsigned char** compressed, const char* edges, un
 }
 
 /* flip position of compressed bitset */
-static void RDL_bitset_flip(unsigned char* bitset, unsigned pos)
-{
+static void RDL_bitset_flip(unsigned char *bitset, unsigned pos) {
   bitset[pos / BlockSize] ^= (unsigned char)(1 << (pos % BlockSize));
 }
 
 /* swap columns of compressed bitset */
-void RDL_swap_columns(unsigned char** rows, unsigned nof_rows, unsigned col1, unsigned col2)
-{
+void RDL_swap_columns(unsigned char **rows, unsigned nof_rows, unsigned col1,
+                      unsigned col2) {
   unsigned char val1, val2;
   unsigned i;
 
@@ -112,7 +110,6 @@ void RDL_swap_columns(unsigned char** rows, unsigned nof_rows, unsigned col1, un
 }
 
 /* test position of compressed bitset */
-unsigned char RDL_bitset_test(unsigned char* bitset, unsigned pos)
-{
+unsigned char RDL_bitset_test(unsigned char *bitset, unsigned pos) {
   return (bitset[pos / BlockSize] >> (pos % BlockSize)) & 1;
 }

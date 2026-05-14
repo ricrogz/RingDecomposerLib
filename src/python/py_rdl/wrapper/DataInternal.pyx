@@ -18,8 +18,9 @@
 
 from cRingDecomposerLib cimport *
 from libc.stdlib cimport free
-from .RDLError import RDLError
+
 from .Cycle import Cycle
+from .RDLError import RDLError
 
 
 cdef convert_cycle(RDL_cycle* cycle):

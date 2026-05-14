@@ -4,14 +4,14 @@
  * Copyright (c) 2016
  * University of Hamburg, ZBH - Center for Bioinformatics
  * Niek Andresen, Florian Flachsenberg, Matthias Rarey
- * 
+ *
  * Please cite:
- * 
+ *
  * Kolodzik, A.; Urbaczek, S.; Rarey, M.
  * Unique Ring Families: A Chemically Meaningful Description
  * of Molecular Ring Topologies.
  * J. Chem. Inf. Model., 2012, 52 (8), pp 2013-2021
- * 
+ *
  * Flachsenberg, F.; Andresen, N.; Rarey, M.
  * RingDecomposerLib: An Open-Source Implementation of
  * Unique Ring Families and Other Cycle Bases.
@@ -25,20 +25,20 @@
 #include "RingDecomposerLib.h"
 
 struct RDL_BCCGraph {
-    unsigned nof_bcc;
+  unsigned nof_bcc;
 
-    RDL_graph** bcc_graphs;
+  RDL_graph** bcc_graphs;
 
-    unsigned** edge_to_bcc_mapping;
-    unsigned** node_to_bcc_mapping;
-    unsigned* nof_bcc_per_node;
+  unsigned** edge_to_bcc_mapping;
+  unsigned** node_to_bcc_mapping;
+  unsigned* nof_bcc_per_node;
 
-    unsigned** edge_from_bcc_mapping;
-    unsigned** node_from_bcc_mapping;
-    unsigned* nof_nodes_per_bcc;
-    unsigned* nof_edges_per_bcc;
+  unsigned** edge_from_bcc_mapping;
+  unsigned** node_from_bcc_mapping;
+  unsigned* nof_nodes_per_bcc;
+  unsigned* nof_edges_per_bcc;
 
-    const RDL_graph* complete_graph;
+  const RDL_graph* complete_graph;
 };
 
 void RDL_deleteBCCGraph(RDL_BCCGraph* graph);

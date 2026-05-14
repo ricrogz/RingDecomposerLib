@@ -4,14 +4,14 @@
  * Copyright (c) 2016
  * University of Hamburg, ZBH - Center for Bioinformatics
  * Niek Andresen, Florian Flachsenberg, Matthias Rarey
- * 
+ *
  * Please cite:
- * 
+ *
  * Kolodzik, A.; Urbaczek, S.; Rarey, M.
  * Unique Ring Families: A Chemically Meaningful Description
  * of Molecular Ring Topologies.
  * J. Chem. Inf. Model., 2012, 52 (8), pp 2013-2021
- * 
+ *
  * Flachsenberg, F.; Andresen, N.; Rarey, M.
  * RingDecomposerLib: An Open-Source Implementation of
  * Unique Ring Families and Other Cycle Bases.
@@ -25,10 +25,10 @@
 #include "RingDecomposerLib.h"
 
 struct RDL_sPathInfo {
-  unsigned **pred; /*predecessor matrix*/
-  unsigned **dist; /*distance matrix*/
-  char **reachable; /*reachable vertices for each vertex via shortest paths
-     only using vertices preceding in order pi (1 or 0/reachable or not)*/
+  unsigned **pred;    /*predecessor matrix*/
+  unsigned **dist;    /*distance matrix*/
+  char **reachable;   /*reachable vertices for each vertex via shortest paths
+       only using vertices preceding in order pi (1 or 0/reachable or not)*/
   RDL_graph **dPaths; /*for each vertex: a subgraph of the original graph that
      stores the shortest paths back to the vertex (in Vismara: U_r).Useful
      to find paths/edges of a RCF.*/

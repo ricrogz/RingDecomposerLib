@@ -4,14 +4,14 @@
  * Copyright (c) 2016
  * University of Hamburg, ZBH - Center for Bioinformatics
  * Niek Andresen, Florian Flachsenberg, Matthias Rarey
- * 
+ *
  * Please cite:
- * 
+ *
  * Kolodzik, A.; Urbaczek, S.; Rarey, M.
  * Unique Ring Families: A Chemically Meaningful Description
  * of Molecular Ring Topologies.
  * J. Chem. Inf. Model., 2012, 52 (8), pp 2013-2021
- * 
+ *
  * Flachsenberg, F.; Andresen, N.; Rarey, M.
  * RingDecomposerLib: An Open-Source Implementation of
  * Unique Ring Families and Other Cycle Bases.
@@ -24,10 +24,10 @@ The vertices have to be numbered from 0 to |V|-1. Call the following functions:
  - RDL_initNewGraph_g(unsigned V) to initialize a new graph with V vertices
     (returns RDL_graph pointer)
 
- - RDL_addUEdge_g(RDL_graph *, unsigned from, unsigned to) to add a new (undirected) edge from
-    the vertex with index "from" to the vertex with index "to". It is NO problem
-    to add an edge twice - even with different order of vertices
-    (will be ignored).
+ - RDL_addUEdge_g(RDL_graph *, unsigned from, unsigned to) to add a new
+(undirected) edge from the vertex with index "from" to the vertex with index
+"to". It is NO problem to add an edge twice - even with different order of
+vertices (will be ignored).
 
 now RDL_calculate can be called on it
 
@@ -40,13 +40,15 @@ now RDL_calculate can be called on it
 
 struct RDL_graph {
   unsigned V, E; /*number of vertices/edges*/
-  unsigned *degree; /*array storing how many vertices are adjacent to each vertex*/
+  unsigned
+      *degree; /*array storing how many vertices are adjacent to each vertex*/
   RDL_edge **adjList; /*the vertices are stored with their index (0 to |V|-1)*/
-  unsigned **edges; /*array containing pairs of vertices as edges*/
+  unsigned **edges;   /*array containing pairs of vertices as edges*/
   unsigned edgesAlloced; /*space alloced for this many edges in 'edges' array*/
 };
 
-/** initializes a new Graph that edges can be added to (allocates space for it) */
+/** initializes a new Graph that edges can be added to (allocates space for it)
+ */
 RDL_graph *RDL_initNewGraph_g(unsigned V, char owns_edges);
 
 /** adds an undirected edge to the graph. */

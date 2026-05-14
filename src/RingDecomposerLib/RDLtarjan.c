@@ -4,14 +4,14 @@
  * Copyright (c) 2016
  * University of Hamburg, ZBH - Center for Bioinformatics
  * Niek Andresen, Florian Flachsenberg, Matthias Rarey
- * 
+ *
  * Please cite:
- * 
+ *
  * Kolodzik, A.; Urbaczek, S.; Rarey, M.
  * Unique Ring Families: A Chemically Meaningful Description
  * of Molecular Ring Topologies.
  * J. Chem. Inf. Model., 2012, 52 (8), pp 2013-2021
- * 
+ *
  * Flachsenberg, F.; Andresen, N.; Rarey, M.
  * RingDecomposerLib: An Open-Source Implementation of
  * Unique Ring Families and Other Cycle Bases.
@@ -26,12 +26,13 @@
 
 #include "RDLgraph.h"
 #include "RDLstack.h"
+#include "RDLutility.h"
 
 typedef struct RDL_dfsStackElement {
-    unsigned u;
-    unsigned parent;
-    unsigned j;
-    unsigned expected_time;
+  unsigned u;
+  unsigned parent;
+  unsigned j;
+  unsigned expected_time;
 } RDL_dfsStackElement;
 
 /*
@@ -41,24 +42,23 @@ typedef struct RDL_dfsStackElement {
  * the stack emulates the recursion by visiting nodes
  * twice
  */
-static void RDL_tarjanVisit(const RDL_graph* graph, unsigned start, unsigned* d,
-    unsigned* low, unsigned* time, unsigned* curr_bcc, unsigned* bcc,
-    RDL_stack* edge_stack)
-{
+static void RDL_tarjanVisit(const RDL_graph *graph, unsigned start, unsigned *d,
+                            unsigned *low, unsigned *time, unsigned *curr_bcc,
+                            unsigned *bcc, RDL_stack *edge_stack) {
   unsigned j, v, curr_edge, uv_edge, u, parent;
   unsigned *element;
   unsigned *edge_elements;
   unsigned next_free_edge_element = 0;
 
   RDL_dfsStackElement *dfs_element, *dfs_element_new;
-  RDL_stack* dfs_stack;
+  RDL_stack *dfs_stack;
 
   RDL_dfsStackElement *dfs_elements;
   unsigned next_free_dfs_element = 0;
 
   dfs_stack = RDL_stack_new();
 
-  dfs_elements = malloc(graph->V * sizeof(*dfs_elements));
+  dfs_elements = RDL_malloc(graph->V * sizeof(*dfs_elements));
   dfs_element = &(dfs_elements[next_free_dfs_element]);
   ++next_free_dfs_element;
 
@@ -72,10 +72,9 @@ static void RDL_tarjanVisit(const RDL_graph* graph, unsigned start, unsigned* d,
 
   RDL_stack_push(dfs_stack, dfs_element);
 
-  edge_elements = malloc(graph->E * sizeof(*edge_elements));
+  edge_elements = RDL_malloc(graph->E * sizeof(*edge_elements));
 
   while (!RDL_stack_empty(dfs_stack)) {
-
     dfs_element = RDL_stack_top(dfs_stack);
     u = dfs_element->u;
     parent = dfs_element->parent;
@@ -111,8 +110,7 @@ static void RDL_tarjanVisit(const RDL_graph* graph, unsigned start, unsigned* d,
          * be discovered when we come back to u
          */
         dfs_element->expected_time = (*time);
-      }
-      else {
+      } else {
         /* in all other cases, we'll NOT be looking again at this neighbour */
         ++dfs_element->j;
 
@@ -147,8 +145,7 @@ static void RDL_tarjanVisit(const RDL_graph* graph, unsigned start, unsigned* d,
           low[u] = low[u] < d[v] ? low[u] : d[v];
         }
       }
-    }
-    else {
+    } else {
       /* if there is no neighbour left => u is finished and goes from stack */
       RDL_stack_pop(dfs_stack);
     }
@@ -160,15 +157,13 @@ static void RDL_tarjanVisit(const RDL_graph* graph, unsigned start, unsigned* d,
 }
 
 /* perform tarjan's algorithm */
-static unsigned RDL_tarjan(const RDL_graph* graph,
-                    unsigned** bcc)
-{
+static unsigned RDL_tarjan(const RDL_graph *graph, unsigned **bcc) {
   unsigned *d, *low, u, time, curr_bcc, i;
-  RDL_stack* edge_stack;
+  RDL_stack *edge_stack;
 
-  d = malloc(graph->V * sizeof(*d));
-  low = malloc(graph->V * sizeof(*low));
-  *bcc = malloc(graph->E * sizeof(**bcc));
+  d = RDL_malloc(graph->V * sizeof(*d));
+  low = RDL_malloc(graph->V * sizeof(*low));
+  *bcc = RDL_malloc(graph->E * sizeof(**bcc));
   for (i = 0; i < graph->E; ++i) {
     (*bcc)[i] = 0;
   }
@@ -194,22 +189,21 @@ static unsigned RDL_tarjan(const RDL_graph* graph,
 
   RDL_stack_delete(edge_stack);
 
-  return (curr_bcc-1);
+  return (curr_bcc - 1);
 }
 
 /* perform Tarjan's algorithm and save mapping */
-RDL_BCCGraph* RDL_tarjanBCC(const RDL_graph* graph)
-{
-  unsigned *bcc, u, node, i, j, k, ii[2],
-    nof_bcc, *bcc_size, nof_nontrivial_bcc=0, curr_bcc, found;
+RDL_BCCGraph *RDL_tarjanBCC(const RDL_graph *graph) {
+  unsigned *bcc, u, node, i, j, k, ii[2], nof_bcc, *bcc_size,
+      nof_nontrivial_bcc = 0, curr_bcc, found;
   unsigned *non_trivial_mapping;
-  RDL_BCCGraph* result;
+  RDL_BCCGraph *result;
 
   nof_bcc = RDL_tarjan(graph, &bcc);
 
-  result = malloc(sizeof(*result));
-  bcc_size = malloc(nof_bcc * sizeof(*bcc_size));
-  non_trivial_mapping = malloc(nof_bcc * sizeof(*non_trivial_mapping));
+  result = RDL_malloc(sizeof(*result));
+  bcc_size = RDL_malloc(nof_bcc * sizeof(*bcc_size));
+  non_trivial_mapping = RDL_malloc(nof_bcc * sizeof(*non_trivial_mapping));
 
   for (i = 0; i < nof_bcc; ++i) {
     bcc_size[i] = 0;
@@ -225,42 +219,50 @@ RDL_BCCGraph* RDL_tarjanBCC(const RDL_graph* graph)
   }
 
   for (i = 0; i < nof_bcc; ++i) {
-    if(bcc_size[i] > 1) {
+    if (bcc_size[i] > 1) {
       non_trivial_mapping[i] = nof_nontrivial_bcc;
       ++nof_nontrivial_bcc;
-    }
-    else {
+    } else {
       non_trivial_mapping[i] = RDL_NO_RINGSYSTEM;
     }
   }
 
   result->complete_graph = graph;
 
-  result->bcc_graphs = malloc(nof_nontrivial_bcc * sizeof(*result->bcc_graphs));
-  result->edge_to_bcc_mapping = malloc(graph->E * sizeof(*result->edge_to_bcc_mapping));
+  result->bcc_graphs =
+      RDL_malloc(nof_nontrivial_bcc * sizeof(*result->bcc_graphs));
+  result->edge_to_bcc_mapping =
+      RDL_malloc(graph->E * sizeof(*result->edge_to_bcc_mapping));
 
   for (i = 0; i < graph->E; ++i) {
-    result->edge_to_bcc_mapping[i] = malloc(2 * sizeof(**result->edge_to_bcc_mapping));
+    result->edge_to_bcc_mapping[i] =
+        RDL_malloc(2 * sizeof(**result->edge_to_bcc_mapping));
     result->edge_to_bcc_mapping[i][0] = RDL_NO_RINGSYSTEM;
     result->edge_to_bcc_mapping[i][1] = RDL_NO_RINGSYSTEM;
   }
 
-  result->edge_from_bcc_mapping = malloc(nof_nontrivial_bcc * sizeof(*result->edge_from_bcc_mapping));
-  result->nof_edges_per_bcc = malloc(nof_nontrivial_bcc * sizeof(*result->nof_edges_per_bcc));
+  result->edge_from_bcc_mapping =
+      RDL_malloc(nof_nontrivial_bcc * sizeof(*result->edge_from_bcc_mapping));
+  result->nof_edges_per_bcc =
+      RDL_malloc(nof_nontrivial_bcc * sizeof(*result->nof_edges_per_bcc));
   for (i = 0; i < nof_nontrivial_bcc; ++i) {
     result->edge_from_bcc_mapping[i] = NULL;
     result->nof_edges_per_bcc[i] = 0;
   }
 
-  result->node_to_bcc_mapping = malloc(graph->V * sizeof(*result->node_to_bcc_mapping));
-  result->nof_bcc_per_node = malloc(graph->V * sizeof(*result->nof_bcc_per_node));
+  result->node_to_bcc_mapping =
+      RDL_malloc(graph->V * sizeof(*result->node_to_bcc_mapping));
+  result->nof_bcc_per_node =
+      RDL_malloc(graph->V * sizeof(*result->nof_bcc_per_node));
   for (i = 0; i < graph->V; ++i) {
     result->nof_bcc_per_node[i] = 0;
     result->node_to_bcc_mapping[i] = NULL;
   }
 
-  result->node_from_bcc_mapping = malloc(nof_nontrivial_bcc * sizeof(*result->node_from_bcc_mapping));
-  result->nof_nodes_per_bcc = malloc(nof_nontrivial_bcc * sizeof(*result->nof_nodes_per_bcc));
+  result->node_from_bcc_mapping =
+      RDL_malloc(nof_nontrivial_bcc * sizeof(*result->node_from_bcc_mapping));
+  result->nof_nodes_per_bcc =
+      RDL_malloc(nof_nontrivial_bcc * sizeof(*result->nof_nodes_per_bcc));
   for (i = 0; i < nof_nontrivial_bcc; ++i) {
     result->node_from_bcc_mapping[i] = NULL;
     result->nof_nodes_per_bcc[i] = 0;
@@ -272,7 +274,7 @@ RDL_BCCGraph* RDL_tarjanBCC(const RDL_graph* graph)
     curr_bcc = bcc[i];
 
     /* skip trivial BCCs */
-    if (bcc_size[curr_bcc-1] <= 1) {
+    if (bcc_size[curr_bcc - 1] <= 1) {
       continue;
     }
 
@@ -280,7 +282,8 @@ RDL_BCCGraph* RDL_tarjanBCC(const RDL_graph* graph)
     u = non_trivial_mapping[curr_bcc - 1];
     result->edge_to_bcc_mapping[i][0] = u;
     result->edge_to_bcc_mapping[i][1] = result->nof_edges_per_bcc[u]++;
-    result->edge_from_bcc_mapping[u] = realloc(result->edge_from_bcc_mapping[u],
+    result->edge_from_bcc_mapping[u] = RDL_realloc(
+        result->edge_from_bcc_mapping[u],
         result->nof_edges_per_bcc[u] * sizeof(**result->edge_from_bcc_mapping));
     result->edge_from_bcc_mapping[u][result->nof_edges_per_bcc[u] - 1] = i;
 
@@ -296,14 +299,22 @@ RDL_BCCGraph* RDL_tarjanBCC(const RDL_graph* graph)
 
       if (!found) {
         ++result->nof_bcc_per_node[node];
-        result->node_to_bcc_mapping[node] = realloc(result->node_to_bcc_mapping[node],
-            2*result->nof_bcc_per_node[node]*sizeof(result->node_to_bcc_mapping[node]));
-        result->node_to_bcc_mapping[node][2*(result->nof_bcc_per_node[node] - 1)] = u;
-        result->node_to_bcc_mapping[node][2*(result->nof_bcc_per_node[node] - 1)+1] = result->nof_nodes_per_bcc[u]++;
+        result->node_to_bcc_mapping[node] =
+            RDL_realloc(result->node_to_bcc_mapping[node],
+                        2 * result->nof_bcc_per_node[node] *
+                            sizeof(result->node_to_bcc_mapping[node]));
+        result->node_to_bcc_mapping[node][2 * (result->nof_bcc_per_node[node] -
+                                               1)] = u;
+        result->node_to_bcc_mapping[node]
+                                   [2 * (result->nof_bcc_per_node[node] - 1) +
+                                    1] = result->nof_nodes_per_bcc[u]++;
 
-        result->node_from_bcc_mapping[u] = realloc(result->node_from_bcc_mapping[u],
-            result->nof_nodes_per_bcc[u] * sizeof(**result->node_from_bcc_mapping));
-        result->node_from_bcc_mapping[u][result->nof_nodes_per_bcc[u]-1] = node;
+        result->node_from_bcc_mapping[u] =
+            RDL_realloc(result->node_from_bcc_mapping[u],
+                        result->nof_nodes_per_bcc[u] *
+                            sizeof(**result->node_from_bcc_mapping));
+        result->node_from_bcc_mapping[u][result->nof_nodes_per_bcc[u] - 1] =
+            node;
       }
     }
   }
@@ -322,7 +333,7 @@ RDL_BCCGraph* RDL_tarjanBCC(const RDL_graph* graph)
 
     ii[0] = ii[1] = RDL_NO_RINGSYSTEM;
 
-    for (k = 0; k <= 1; ++ k) {
+    for (k = 0; k <= 1; ++k) {
       for (j = 0; j < result->nof_bcc_per_node[graph->edges[i][k]]; ++j) {
         if (result->node_to_bcc_mapping[graph->edges[i][k]][2 * j] == u) {
           ii[k] = result->node_to_bcc_mapping[graph->edges[i][k]][2 * j + 1];
@@ -330,7 +341,7 @@ RDL_BCCGraph* RDL_tarjanBCC(const RDL_graph* graph)
       }
       if (ii[k] == RDL_NO_RINGSYSTEM) {
         RDL_outputFunc(RDL_ERROR, "node %u not part of BCC %u!\n",
-            graph->edges[i][k], u);
+                       graph->edges[i][k], u);
         /* should never happen */
         assert(0);
       }
@@ -345,8 +356,7 @@ RDL_BCCGraph* RDL_tarjanBCC(const RDL_graph* graph)
   return result;
 }
 
-void RDL_deleteBCCGraph(RDL_BCCGraph* graph)
-{
+void RDL_deleteBCCGraph(RDL_BCCGraph *graph) {
   unsigned i;
 
   for (i = 0; i < graph->nof_bcc; ++i) {

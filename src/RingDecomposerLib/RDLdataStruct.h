@@ -4,14 +4,14 @@
  * Copyright (c) 2016
  * University of Hamburg, ZBH - Center for Bioinformatics
  * Niek Andresen, Florian Flachsenberg, Matthias Rarey
- * 
+ *
  * Please cite:
- * 
+ *
  * Kolodzik, A.; Urbaczek, S.; Rarey, M.
  * Unique Ring Families: A Chemically Meaningful Description
  * of Molecular Ring Topologies.
  * J. Chem. Inf. Model., 2012, 52 (8), pp 2013-2021
- * 
+ *
  * Flachsenberg, F.; Andresen, N.; Rarey, M.
  * RingDecomposerLib: An Open-Source Implementation of
  * Unique Ring Families and Other Cycle Bases.
@@ -33,13 +33,14 @@ struct RDL_data {
   unsigned nofURFs; /*number of URFs*/
   unsigned nofRCFs; /*number of RCFS*/
 
-  RDL_BCCGraph* bccGraphs;
+  RDL_BCCGraph *bccGraphs;
 
   unsigned *nofURFsPerBCC; /*number of URFs*/
   unsigned *nofRCFsPerBCC; /*number of RCFs*/
-  RDL_cfURF **CFsPerBCC; /*the cycle families (found by Vismara's algorithm)*/
-  RDL_URFinfo **urfInfoPerBCC;/*stores which RCF are URF related and belong to the same URF*/
-  RDL_sPathInfo **spiPerBCC; /*shortest paths info*/
+  RDL_cfURF **CFsPerBCC;   /*the cycle families (found by Vismara's algorithm)*/
+  RDL_URFinfo **urfInfoPerBCC; /*stores which RCF are URF related and belong to
+                                  the same URF*/
+  RDL_sPathInfo **spiPerBCC;   /*shortest paths info*/
 
   /*
    * this array maps the URFs to BCCs
@@ -53,7 +54,6 @@ struct RDL_data {
    * at position 1 the internal index of the RCF in this URF
    */
   unsigned (*rcf_to_urf)[2];
-
 };
 
 #endif

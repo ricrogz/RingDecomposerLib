@@ -4,14 +4,14 @@
  * Copyright (c) 2016
  * University of Hamburg, ZBH - Center for Bioinformatics
  * Niek Andresen, Florian Flachsenberg, Matthias Rarey
- * 
+ *
  * Please cite:
- * 
+ *
  * Kolodzik, A.; Urbaczek, S.; Rarey, M.
  * Unique Ring Families: A Chemically Meaningful Description
  * of Molecular Ring Topologies.
  * J. Chem. Inf. Model., 2012, 52 (8), pp 2013-2021
- * 
+ *
  * Flachsenberg, F.; Andresen, N.; Rarey, M.
  * RingDecomposerLib: An Open-Source Implementation of
  * Unique Ring Families and Other Cycle Bases.
@@ -27,13 +27,13 @@
 #ifndef RING_DECOMPOSER_LIB_H
 #define RING_DECOMPOSER_LIB_H
 
-#if (defined( _WIN32 ) && defined( _MSC_VER ) )
-    /* Win32 & MS VC ++ */
-    #define RDL_API __declspec(dllexport)
+#if (defined(_WIN32) && defined(_MSC_VER))
+/* Win32 & MS VC ++ */
+#define RDL_API __declspec(dllexport)
 #elif __GNUC__ >= 4 || defined(__clang__)
-    #define RDL_API __attribute__((visibility("default")))
+#define RDL_API __attribute__((visibility("default")))
 #else
-    #define RDL_API
+#define RDL_API
 #endif
 
 #ifdef __cplusplus
@@ -59,8 +59,9 @@ typedef struct RDL_data RDL_data;
  * \ref RDL_initNewGraph(unsigned V) to initialize a new graph with V vertices
  * (returns \ref RDL_graph *)
  *
- * \ref RDL_addUEdge(RDL_graph *, RDL_node from, RDL_node to) to add a new (undirected) edge
- * from the vertex with index "from" to the vertex with index "to".
+ * \ref RDL_addUEdge(RDL_graph *, RDL_node from, RDL_node to) to add a new
+ * (undirected) edge from the vertex with index "from" to the vertex with index
+ * "to".
  *
  * Then \ref RDL_calculate can be called on it.
  *
@@ -79,7 +80,7 @@ typedef RDL_node RDL_edge[2];
 
 /**
  * @brief error levels for custom logging functions
-*/
+ */
 typedef enum RDL_ERROR_LEVEL {
   RDL_DEBUG,
   RDL_WARNING,
@@ -93,7 +94,7 @@ typedef enum RDL_ERROR_LEVEL {
  * @param level `RDL_ERROR_LEVEL` specifying the level of the message
  * @param m message associated with the event
  */
-typedef void (*RDL_outputFunction) (RDL_ERROR_LEVEL level, const char* m, ...);
+typedef void (*RDL_outputFunction)(RDL_ERROR_LEVEL level, const char *m, ...);
 
 /** @brief the output function for warnings and errors */
 RDL_API extern RDL_outputFunction RDL_outputFunc;
@@ -116,13 +117,13 @@ void RDL_setOutputFunction(RDL_outputFunction func);
  * @brief An output function for writing everything to stderr
  */
 RDL_API
-void RDL_writeToStderr(RDL_ERROR_LEVEL level, const char* fmt, ...);
+void RDL_writeToStderr(RDL_ERROR_LEVEL level, const char *fmt, ...);
 
 /**
  * @brief No output function
  */
 RDL_API
-void RDL_writeNothing(RDL_ERROR_LEVEL level, const char* fmt, ...);
+void RDL_writeNothing(RDL_ERROR_LEVEL level, const char *fmt, ...);
 
 /** @brief Invalid result indicator */
 RDL_API extern const unsigned RDL_INVALID_RESULT;
@@ -161,9 +162,11 @@ RDL_API
 unsigned RDL_addUEdge(RDL_graph *graph, RDL_node node1, RDL_node node2);
 
 /**
- * @brief Calculates the \ref RDL_data structure of the given graph and returns it.
+ * @brief Calculates the \ref RDL_data structure of the given graph and returns
+ * it.
  * @param input_graph The graph for calculation.
- * @return pointer to the \ref RDL_data containing the calculation result, `NULL` on failure
+ * @return pointer to the \ref RDL_data containing the calculation result,
+ * `NULL` on failure
  * @note The \ref RDL_graph has to be an undirected graph.
  * @note Takes ownership of the \ref RDL_graph, if calculation is successful!
  */
@@ -180,7 +183,8 @@ void RDL_deleteData(RDL_data *data);
 
 /**
  * @brief Returns the number of URFs.
- * @param data Pointer to the \ref RDL_data of which the number of URF is requested
+ * @param data Pointer to the \ref RDL_data of which the number of URF is
+ * requested
  * @return The number of URFs, \ref RDL_INVALID_RESULT on failure
  */
 RDL_API
@@ -188,7 +192,8 @@ unsigned RDL_getNofURF(const RDL_data *data);
 
 /**
  * @brief Returns the number of RCFs.
- * @param data Pointer to the \ref RDL_data of which the number of RCF is requested
+ * @param data Pointer to the \ref RDL_data of which the number of RCF is
+ * requested
  * @return The number of RCFs, \ref RDL_INVALID_RESULT on failure
  */
 RDL_API
@@ -198,7 +203,8 @@ unsigned RDL_getNofRCF(const RDL_data *data);
  * @brief Returns the weight of each cycle in the URF identified by its index.
  * @param data pointer to the \ref RDL_data holding the URFs
  * @param index the index of the URF
- * @return the weight of the URF, \ref RDL_INVALID_RESULT on failure (if `index` is out of range)
+ * @return the weight of the URF, \ref RDL_INVALID_RESULT on failure (if `index`
+ * is out of range)
  */
 RDL_API
 unsigned RDL_getWeightForURF(const RDL_data *data, unsigned index);
@@ -207,13 +213,15 @@ unsigned RDL_getWeightForURF(const RDL_data *data, unsigned index);
  * @brief Returns the weight of each cycle in the RCF identified by its index.
  * @param data pointer to the \ref RDL_data holding the URFs
  * @param index the index of the RCF
- * @return the weight of the RCF, \ref RDL_INVALID_RESULT on failure (if `index` is out of range)
+ * @return the weight of the RCF, \ref RDL_INVALID_RESULT on failure (if `index`
+ * is out of range)
  */
 RDL_API
 unsigned RDL_getWeightForRCF(const RDL_data *data, unsigned index);
 
 /**
- * @brief Gives the nodes of an URF identified with its index in an array of \ref RDL_node.
+ * @brief Gives the nodes of an URF identified with its index in an array of
+ * \ref RDL_node.
  * @return the number of nodes in the URF, \ref RDL_INVALID_RESULT on failure
  * @param data pointer to the \ref RDL_data holding the calculation results.
  * @param index the index of the URF
@@ -233,15 +241,16 @@ unsigned RDL_getNodesForURF(const RDL_data *data, unsigned index,
  * @param RDL_edge_array_ptr pointer that points to the result array (declare
  * \ref RDL_edge * and give address as parameter)
  * @note Result has to be deallocated using `free(*RDL_edge_array_ptr)`
- * Gives an array of edges where an edge is represented by two \ref RDL_node that it
- * connects.
+ * Gives an array of edges where an edge is represented by two \ref RDL_node
+ * that it connects.
  */
 RDL_API
 unsigned RDL_getEdgesForURF(const RDL_data *data, unsigned index,
                             RDL_edge **RDL_edge_array_ptr);
 
 /**
- * @brief Gives the nodes of an RCF identified with its index in an array of \ref RDL_node.
+ * @brief Gives the nodes of an RCF identified with its index in an array of
+ * \ref RDL_node.
  * @return the number of nodes in the RCF, \ref RDL_INVALID_RESULT on failure
  * @param data pointer to the \ref RDL_data holding the calculation results.
  * @param index the index of the RCF
@@ -261,8 +270,8 @@ unsigned RDL_getNodesForRCF(const RDL_data *data, unsigned index,
  * @param RDL_edge_array_ptr pointer that points to the result array (declare
  * \ref RDL_edge * and give address as parameter)
  * @note Result has to be deallocated using `free(*RDL_edge_array_ptr)`
- * Gives an array of edges where an edge is represented by two \ref RDL_node that it
- * connects.
+ * Gives an array of edges where an edge is represented by two \ref RDL_node
+ * that it connects.
  */
 RDL_API
 unsigned RDL_getEdgesForRCF(const RDL_data *data, unsigned index,
@@ -272,7 +281,8 @@ unsigned RDL_getEdgesForRCF(const RDL_data *data, unsigned index,
  * @brief Returns the number of URFs that contain the given node.
  * @param data pointer to the \ref RDL_data holding the calculation results.
  * @param node the \ref RDL_node to look for in the URFs
- * @return number of URFs containing the node, \ref RDL_INVALID_RESULT on failure
+ * @return number of URFs containing the node, \ref RDL_INVALID_RESULT on
+ * failure
  * @note This functions internally enumerates all nodes for each URF.
  * For repeated checks with different \ref RDL_node it is recommended to
  * enumerate them with \ref RDL_getNodesForURF and check against this array.
@@ -285,7 +295,8 @@ unsigned RDL_getNofURFContainingNode(const RDL_data *data, RDL_node node);
  * by the two given nodes
  * @param data Pointer to the \ref RDL_data storing the calculation results.
  * @param node1, node2 pair of \ref RDL_node connected by the edge
- * @return number of URFs containing the edge, \ref RDL_INVALID_RESULT on failure
+ * @return number of URFs containing the edge, \ref RDL_INVALID_RESULT on
+ * failure
  * @note This functions internally enumerates all edges for each URF.
  * For repeated checks with different \ref RDL_node it is recommended to
  * enumerate them with \ref RDL_getEdgesForURF and check against this array.
@@ -298,7 +309,8 @@ unsigned RDL_getNofURFContainingEdge(const RDL_data *data, RDL_node node1,
  * @brief Returns the number of RCFs that contain the given node.
  * @param data pointer to the \ref RDL_data holding the calculation results.
  * @param node the \ref RDL_node to look for in the RCFs
- * @return number of RCFs containing the node, \ref RDL_INVALID_RESULT on failure
+ * @return number of RCFs containing the node, \ref RDL_INVALID_RESULT on
+ * failure
  * @note This functions internally enumerates all nodes for each RCF.
  * For repeated checks with different \ref RDL_node it is recommended to
  * enumerate them with \ref RDL_getNodesForRCF and check against this array.
@@ -311,7 +323,8 @@ unsigned RDL_getNofRCFContainingNode(const RDL_data *data, RDL_node node);
  * by the two given nodes
  * @param data Pointer to the \ref RDL_data storing the calculation results.
  * @param node1, node2 pair of \ref RDL_node connected by the edge
- * @return number of RCFs containing the edge, \ref RDL_INVALID_RESULT on failure
+ * @return number of RCFs containing the edge, \ref RDL_INVALID_RESULT on
+ * failure
  * @note This functions internally enumerates all edges for each RCF.
  * For repeated checks with different \ref RDL_node it is recommended to
  * enumerate them with \ref RDL_getEdgesForRCF and check against this array.
@@ -322,12 +335,13 @@ unsigned RDL_getNofRCFContainingEdge(const RDL_data *data, RDL_node node1,
 
 /**
  * @brief Gives all URFs containing the node.
- * @return the number of URFs containing the node, \ref RDL_INVALID_RESULT on failure
+ * @return the number of URFs containing the node, \ref RDL_INVALID_RESULT on
+ * failure
  * @param data pointer to the \ref RDL_data holding the calculation results
  * @param node the \ref RDL_node
  * @param RDL_ids_ptr pointer that points to the result array of integers
- * containing all indices of URFs containing the node. (declare `unsigned *` and give
- * address as parameter)
+ * containing all indices of URFs containing the node. (declare `unsigned *` and
+ * give address as parameter)
  * @note The array RDL_ids_ptr has to be to be deallocated with
  * `free(*RDL_ids_ptr)`
  * @note This functions internally enumerates all nodes for each URF.
@@ -340,13 +354,14 @@ unsigned RDL_getURFsContainingNode(const RDL_data *data, RDL_node node,
 
 /**
  * @brief Gives all URFs containing the edge.
- * @return the number of URFs containing the edge, \ref RDL_INVALID_RESULT on failure
+ * @return the number of URFs containing the edge, \ref RDL_INVALID_RESULT on
+ * failure
  * @param data pointer to the \ref RDL_data holding the calculation results
  * @param node1 the first \ref RDL_node of the edge
  * @param node2 the the second \ref RDL_node of the edge
  * @param RDL_ids_ptr pointer that points to the result array of integers
- * containing all indices of URFs containing the edge. (declare  `unsigned *` and give
- * address as parameter)
+ * containing all indices of URFs containing the edge. (declare  `unsigned *`
+ * and give address as parameter)
  * @note The array RDL_ids_ptr has to be to be deallocated with
  * `free(*RDL_ids_ptr)`
  * @note This functions internally enumerates all edges for each URF.
@@ -359,12 +374,13 @@ unsigned RDL_getURFsContainingEdge(const RDL_data *data, RDL_node node1,
 
 /**
  * @brief Gives all RCFs containing the node.
- * @return the number of RCFs containing the node, \ref RDL_INVALID_RESULT on failure
+ * @return the number of RCFs containing the node, \ref RDL_INVALID_RESULT on
+ * failure
  * @param data pointer to the \ref RDL_data holding the calculation results
  * @param node the \ref RDL_node
  * @param RDL_ids_ptr pointer that points to the result array of integers
- * containing all indices of URFs containing the node. (declare `unsigned *` and give
- * address as parameter)
+ * containing all indices of URFs containing the node. (declare `unsigned *` and
+ * give address as parameter)
  * @note The array RDL_ids_ptr has to be to be deallocated with
  * `free(*RDL_ids_ptr)`
  * @note This functions internally enumerates all nodes for each RCF.
@@ -377,13 +393,14 @@ unsigned RDL_getRCFsContainingNode(const RDL_data *data, RDL_node node,
 
 /**
  * @brief Gives all RCFs containing the edge.
- * @return the number of RCFs containing the edge, \ref RDL_INVALID_RESULT on failure
+ * @return the number of RCFs containing the edge, \ref RDL_INVALID_RESULT on
+ * failure
  * @param data pointer to the \ref RDL_data holding the calculation results
  * @param node1 the first \ref RDL_node of the edge
  * @param node2 the the second \ref RDL_node of the edge
  * @param RDL_ids_ptr pointer that points to the result array of integers
- * containing all indices of RCFs containing the edge. (declare  `unsigned *` and give
- * address as parameter)
+ * containing all indices of RCFs containing the edge. (declare  `unsigned *`
+ * and give address as parameter)
  * @note The array RDL_ids_ptr has to be to be deallocated with
  * `free(*RDL_ids_ptr)`
  * @note This functions internally enumerates all edges for each RCF.
@@ -399,14 +416,14 @@ unsigned RDL_getRCFsContainingEdge(const RDL_data *data, RDL_node node1,
  * It is essentially an array of edges which are represented by pairs of nodes.
  */
 typedef struct RDL_cycle {
-    /** array of \ref RDL_edge in the cycle */
-    RDL_edge *edges;
-    /** weight of the cycle (length of the array) */
-    unsigned weight;
-    /** URF of the cycle */
-    unsigned urf;
-    /** RCF of the cycle */
-    unsigned rcf;
+  /** array of \ref RDL_edge in the cycle */
+  RDL_edge *edges;
+  /** weight of the cycle (length of the array) */
+  unsigned weight;
+  /** URF of the cycle */
+  unsigned urf;
+  /** RCF of the cycle */
+  unsigned rcf;
 } RDL_cycle;
 
 /**
@@ -443,7 +460,7 @@ typedef struct RDL_cycleIterator RDL_cycleIterator;
  * @note DO NOT call without checking \ref RDL_cycleIteratorAtEnd
  */
 RDL_API
-RDL_cycleIterator* RDL_cycleIteratorNext(RDL_cycleIterator* it);
+RDL_cycleIterator *RDL_cycleIteratorNext(RDL_cycleIterator *it);
 
 /**
  * @brief Get the cycle as \ref RDL_cycle
@@ -454,7 +471,7 @@ RDL_cycleIterator* RDL_cycleIteratorNext(RDL_cycleIterator* it);
  * @note DO NOT call without checking \ref RDL_cycleIteratorAtEnd
  */
 RDL_API
-RDL_cycle* RDL_cycleIteratorGetCycle(RDL_cycleIterator* it);
+RDL_cycle *RDL_cycleIteratorGetCycle(RDL_cycleIterator *it);
 
 /**
  * @brief Check if iterator is at end (invalid)
@@ -462,13 +479,13 @@ RDL_cycle* RDL_cycleIteratorGetCycle(RDL_cycleIterator* it);
  * @returns 0 if not at end, a non-zero value otherwise
  */
 RDL_API
-int RDL_cycleIteratorAtEnd(RDL_cycleIterator* it);
+int RDL_cycleIteratorAtEnd(RDL_cycleIterator *it);
 /**
  * @brief Free memory of the cycle iterator
  * @param it \ref RDL_cycleIterator
  */
 RDL_API
-void RDL_deleteCycleIterator(RDL_cycleIterator* it);
+void RDL_deleteCycleIterator(RDL_cycleIterator *it);
 
 /**
  * @brief Gives all relevant cycles of the URF with the given index.
@@ -493,7 +510,8 @@ unsigned RDL_getRCyclesForURF(const RDL_data *data, unsigned index,
  * @note See \ref RDL_cycleIterator for an example.
  */
 RDL_API
-RDL_cycleIterator* RDL_getRCyclesForURFIterator(const RDL_data *data, unsigned index);
+RDL_cycleIterator *RDL_getRCyclesForURFIterator(const RDL_data *data,
+                                                unsigned index);
 
 /**
  * @brief Gives all relevant cycles of the RCF with the given index.
@@ -518,7 +536,8 @@ unsigned RDL_getRCyclesForRCF(const RDL_data *data, unsigned index,
  * @note See \ref RDL_cycleIterator for an example.
  */
 RDL_API
-RDL_cycleIterator* RDL_getRCyclesForRCFIterator(const RDL_data *data, unsigned index);
+RDL_cycleIterator *RDL_getRCyclesForRCFIterator(const RDL_data *data,
+                                                unsigned index);
 
 /**
  * @brief Gives a list of all relevant cycles
@@ -541,14 +560,15 @@ unsigned RDL_getRCycles(const RDL_data *data, RDL_cycle ***RDL_cycle_array_ptr);
  * @note See \ref RDL_cycleIterator for an example.
  */
 RDL_API
-RDL_cycleIterator* RDL_getRCyclesIterator(const RDL_data *data);
+RDL_cycleIterator *RDL_getRCyclesIterator(const RDL_data *data);
 
 /**
  * @brief Gives the number of relevant cycles in this URF
  * @param data pointer to the \ref RDL_data holding the calculation results
  * @param index the index of the URF
  * @returns the number of relevant cycles in the URF or
- * \ref RDL_INVALID_RC_COUNT if the number is too large to calculate or on failure
+ * \ref RDL_INVALID_RC_COUNT if the number is too large to calculate or on
+ * failure
  */
 RDL_API
 double RDL_getNofRCForURF(const RDL_data *data, unsigned index);
@@ -558,7 +578,8 @@ double RDL_getNofRCForURF(const RDL_data *data, unsigned index);
  * @param data pointer to the \ref RDL_data holding the calculation results.
  * @param index id of the RCF
  * @returns the number of relevant cycles in the RCF or
- * \ref RDL_INVALID_RC_COUNT if the number is too large to calculate or on failure
+ * \ref RDL_INVALID_RC_COUNT if the number is too large to calculate or on
+ * failure
  */
 RDL_API
 double RDL_getNofRCForRCF(const RDL_data *data, unsigned index);
@@ -567,7 +588,8 @@ double RDL_getNofRCForRCF(const RDL_data *data, unsigned index);
  * @brief Gives the number of relevant cycles
  * @param data pointer to the \ref RDL_data holding the calculation results
  * @returns the number of relevant cycles
- * \ref RDL_INVALID_RC_COUNT if the number is too large to calculate or on failure
+ * \ref RDL_INVALID_RC_COUNT if the number is too large to calculate or on
+ * failure
  */
 RDL_API
 double RDL_getNofRC(const RDL_data *data);
@@ -601,9 +623,9 @@ unsigned RDL_getRCPrototypes(const RDL_data *data,
                              RDL_cycle ***RDL_cycle_array_ptr);
 
 /**
- * @brief Deallocates the structure given by \ref RDL_getRCycles(), \ref RDL_getSSSR(),
- * \ref RDL_getRCPrototypes() and \ref RDL_getRCyclesForURF(), if called on its result and
- * return value (the number of cycles)
+ * @brief Deallocates the structure given by \ref RDL_getRCycles(), \ref
+ * RDL_getSSSR(), \ref RDL_getRCPrototypes() and \ref RDL_getRCyclesForURF(), if
+ * called on its result and return value (the number of cycles)
  * @param cycles The array of cycles.
  * @param number The number of cycles in the array
  */
@@ -612,32 +634,32 @@ void RDL_deleteCycles(RDL_cycle **cycles, unsigned number);
 
 /**
  * @brief Translates the results of \ref RDL_getRCycles(), \ref RDL_getSSSR(),
- * \ref RDL_getRCPrototypes() and \ref RDL_getRCyclesForURF() (arrays of \ref RDL_cycle) into an
- * array of cycles represented by arrays of `{0,1}^|E|` (bitsets).
+ * \ref RDL_getRCPrototypes() and \ref RDL_getRCyclesForURF() (arrays of \ref
+ * RDL_cycle) into an array of cycles represented by arrays of `{0,1}^|E|`
+ * (bitsets).
  * @param data pointer to the \ref RDL_data holding the calculation results.
  * @param old_array The resulting structure of the functions named above
  * @param number The return value of the functions named above
  * (the number of cycles given)
  * @param RDL_cycle_array_ptr pointer to the result array
  * (declare char ** and give address as parameter)
- * @return The number of cycles given (same as the parameter 'number'), \ref RDL_INVALID_RESULT on failure
+ * @return The number of cycles given (same as the parameter 'number'), \ref
+ * RDL_INVALID_RESULT on failure
  * @note The initial structure still exists afterwards and still has to be
  * deleted.
  *
  * The resulting array has a 1 at
- * position i if edge i is part of the cycle or 0 otherwise. An edge is identified
- * by the position at which it was added to the graph starting at 0
+ * position i if edge i is part of the cycle or 0 otherwise. An edge is
+ * identified by the position at which it was added to the graph starting at 0
  * (the return value of \ref RDL_addUEdge()).
  */
 RDL_API
-unsigned RDL_translateCycArray(const RDL_data *data,
-                               RDL_cycle **old_array,
-                               unsigned number,
-                               char ***RDL_cycle_array_ptr);
+unsigned RDL_translateCycArray(const RDL_data *data, RDL_cycle **old_array,
+                               unsigned number, char ***RDL_cycle_array_ptr);
 
 /**
- * @brief Deallocates the structure given by \ref RDL_translateCycArray(), if called on
- * its result and return value (the number of cycles).
+ * @brief Deallocates the structure given by \ref RDL_translateCycArray(), if
+ * called on its result and return value (the number of cycles).
  * @param cycles The translated array of cycles.
  * @param number The number of cycles in the array.
  */
@@ -678,10 +700,11 @@ unsigned RDL_getEdgeId(const RDL_data *data, unsigned from, unsigned to);
 /**
  * @brief Get the number of ring systems in the graph.
  * @param data pointer to the \ref RDL_data holding the calculation results.
- * @returns number of ring systems in the graph, \ref RDL_INVALID_RESULT on error
+ * @returns number of ring systems in the graph, \ref RDL_INVALID_RESULT on
+ * error
  */
 RDL_API
-unsigned RDL_getNofRingsystems(const RDL_data* data);
+unsigned RDL_getNofRingsystems(const RDL_data *data);
 
 /**
  * @brief Get the number of nodes in the ring system.
@@ -714,8 +737,8 @@ unsigned RDL_getNofEdgesForRingsystem(const RDL_data *data, unsigned idx);
  * @note A ring system is a 2-connected component of the graph.
  */
 RDL_API
-unsigned RDL_getEdgesForRingsystem(
-    const RDL_data *data, unsigned idx, RDL_edge** edges);
+unsigned RDL_getEdgesForRingsystem(const RDL_data *data, unsigned idx,
+                                   RDL_edge **edges);
 
 /**
  * @brief Get the nodes in the ring system.
@@ -728,8 +751,8 @@ unsigned RDL_getEdgesForRingsystem(
  * @note A ring system is a 2-connected component of the graph.
  */
 RDL_API
-unsigned RDL_getNodesForRingsystem(
-    const RDL_data *data, unsigned idx, RDL_node** nodes);
+unsigned RDL_getNodesForRingsystem(const RDL_data *data, unsigned idx,
+                                   RDL_node **nodes);
 
 /**
  * @brief Get the ring system id for given edge.
@@ -741,8 +764,8 @@ unsigned RDL_getNodesForRingsystem(
  * @note A ring system is a 2-connected component of the graph.
  */
 RDL_API
-unsigned RDL_getRingsystemForEdge(
-    const RDL_data* data, unsigned from, unsigned to);
+unsigned RDL_getRingsystemForEdge(const RDL_data *data, unsigned from,
+                                  unsigned to);
 
 #ifdef __cplusplus
 } /* extern "C" */
